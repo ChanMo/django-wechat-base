@@ -27,13 +27,14 @@
 .. code-block::
 
     # wechat config
-    WECHAT_APPID = 'test'
-    WECHAT_APPSECRET = 'test'
-    WECHAT_TOKEN = 'yourtoken'
-    WECHAT_MCH_ID = 'test'
-    WECHAT_KEY = 'test'
-    WECHAT_JS_DEBUG = 'test'
-    WECHAT_JS_APILIST = ['test']
+    WECHAT_APPID = ''
+    WECHAT_APPSECRET = ''
+    WECHAT_TOKEN = ''
+    WECHAT_DOMAIN = ''
+    WECHAT_MCH_ID = ''
+    WECHAT_KEY = ''
+    WECHAT_JS_DEBUG = ''
+    WECHAT_JS_APILIST = []
 
 
 版本更改:
