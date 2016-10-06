@@ -5,8 +5,8 @@ from .message import Message
 
 @csrf_exempt
 def index(request):
-    wx = api.Base()
     data = request.GET
+    wx = Message(request)
     try:
         echostr = data['echostr']
         result = wx.check_sign(data)
@@ -15,4 +15,5 @@ def index(request):
         else:
             return HttpResponse('error')
     except KeyError:
-        wx_res = api.Response(request)
+        result = wx.response()
+        return HttpResponse(result)

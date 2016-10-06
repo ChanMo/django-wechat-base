@@ -29,9 +29,9 @@ class Base(object):
 
     def __init__(self):
         try:
-            self.appid = settings.WECHAT_APPID
-            self.appsecret = settings.WECHAT_APPSECRET
-            self.token = settings.WECHAT_TOKEN
+            self.appid = settings.WECHAT[0]['appid']
+            self.appsecret = settings.WECHAT[0]['appsecret']
+            self.token = settings.WECHAT[0]['token']
         except AttributeError:
             print("Base Config is NULL")
             sys.exit()

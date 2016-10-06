@@ -1,7 +1,9 @@
 import sys
 import time
 import json
+import xmltodict
 from .base import Base
+from .models import Rule, Text, News
 
 class Template(Base):
     """
@@ -38,7 +40,7 @@ class Message(Base):
             print("message has not msgtype")
             return ""
 
-        rule = MessageRule()
+        rule = MessageRule('test')
 
         normal_list = ['text','image','voice','video','shortvideo','location',\
                 'link','event']
@@ -85,22 +87,27 @@ class Message(Base):
 
 class MessageRule(Base):
     def __init__(self, openid):
+        super(MessageRule, self).__init__()
         self.message_xml = {
             'xml': {
-                'ToUserName': self.appid,
-                'FromUserName': openid,
-                'CreateTime': int(time.time()),
-                'MsgType': NULL,
+                'ToUserName': openid,
+                'FromUserName': self.appid,
+                'CreateTime': '',
+                'MsgType': '',
             }
         }
+        try:
+            self.message_default = settings.WECHAT[0]['message_default']
+        except KeyError:
+            self.message_default = True
 
     def get_rule(self, keyword):
         try:
             rule = Rule.objects.get(keyword=keyword)
             return self.response(rule)
         except Rule.DoesNotExist:
-            if settings.WECHAT_MESSAGE_DEFAULT_KEFU:
-                result = kefu_response()
+            if self.message_default != True
+                result = response_customer_service()
                 return result
             else:
                 rule = Rule.objects.get(keyword='default')
@@ -110,10 +117,10 @@ class MessageRule(Base):
 
 
     def response(self, rule):
-        if rule.type == 'text':
-            result = self.response_text(rule.type_id)
-        elif rule.type == 'news':
-            result = self.response_news(rule.type_id)
+        if rule.object_type == 'text':
+            result = self.response_text(rule.object_id)
+        elif rule.object_type == 'news':
+            result = self.response_news(rule.object_id)
         else:
             result = ""
         return result
@@ -121,18 +128,20 @@ class MessageRule(Base):
     def response_text(self, pk):
         text = Text.objects.get(pk=pk)
         message = self.message_xml
-        message.CreateTime = int(time.time())
-        message.MsgType = 'text'
+        message['xml']['CreateTime'] = int(time.time())
+        message['xml']['MsgType'] = 'text'
+        message['xml']['Content'] = text.content
+        print(message)
         return self.dict_to_xml(message)
 
 
     def response_news(self, pk):
         news = News.objects.get(pk=pk)
         message = self.message_xml
-        message.CreateTime = int(time.time())
-        message.MsgType = 'news'
-        message.ArticleCount = 1
-        message.Articles = {
+        message['xml']['CreateTime'] = int(time.time())
+        message['xml']['MsgType'] = 'news'
+        message['xml']['ArticleCount'] = 1
+        message['xml']['Articles'] = {
             'item': {
                 'Title': news.title,
                 'Description': news.description,
@@ -145,6 +154,6 @@ class MessageRule(Base):
 
     def response_customer_service(self):
         message = self.message_xml
-        message.CreateTime = int(time.time())
-        message.MsgType = 'transfer_customer_service'
+        message['xml']['CreateTime'] = int(time.time())
+        message['xml']['MsgType'] = 'transfer_customer_service'
         return self.dict_to_xml(message)
