@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ValidationError
 from django.db import models
 
 class Rule(models.Model):
@@ -27,6 +28,18 @@ class Text(models.Model):
     def __unicode__(self):
         return self.keyword
 
+    def clean(self):
+        if Rule.objects.filter(keyword=self.keyword).exists():
+            raise ValidationError(_('keyword is already exist'))
+
+    def save(self, *args, **kwargs):
+        super(Text, self).save(*args, **kwargs)
+        Rule.objects.create(
+                keyword = self.keyword,
+                object_id = self.id,
+                object_type = 'text'
+        )
+
 
 class News(models.Model):
     keyword = models.CharField(_('keyword'), max_length=200)
@@ -38,3 +51,15 @@ class News(models.Model):
 
     def __unicode__(self):
         return self.keyword
+
+    def clean(self):
+        if Rule.objects.filter(keyword=self.keyword).exists():
+            raise ValidationError(_('keyword is already exist'))
+
+    def save(self, *args, **kwargs):
+        super(News, self).save(*args, **kwargs)
+        Rule.objects.create(
+                keyword = self.keyword,
+                object_id = self.id,
+                object_type = 'news'
+        )

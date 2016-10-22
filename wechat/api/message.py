@@ -3,7 +3,7 @@ import time
 import json
 import xmltodict
 from .base import Base
-from .models import Rule, Text, News
+from ..models import Rule, Text, News
 
 class Template(Base):
     """
@@ -17,7 +17,6 @@ class Template(Base):
         return result
 
 
-
 class Message(Base):
     """
     Message Class, Receive and response message
@@ -26,14 +25,13 @@ class Message(Base):
         data = request.body
         try:
             data = dict(xmltodict.parse(data)['xml'])
-        except KeyError:
+        except:
             print("Request data error")
-            sys.exit()
+            #sys.exit()
         self.receive_data = data
 
     def response(self):
         data = self.receive_data
-
         try:
             msg_type = data['MsgType']
         except KeyError:
@@ -106,7 +104,7 @@ class MessageRule(Base):
             rule = Rule.objects.get(keyword=keyword)
             return self.response(rule)
         except Rule.DoesNotExist:
-            if self.message_default != True
+            if self.message_default != True:
                 result = response_customer_service()
                 return result
             else:

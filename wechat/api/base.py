@@ -8,7 +8,6 @@ from django.conf import settings
 
 import xmltodict #pip install xmltodict
 
-
 class Base(object):
     """
     Wechat Base Class
@@ -56,7 +55,10 @@ class Base(object):
 
     def get_data(self, url, data='', data_type='json'):
         """Get data from url"""
-        result = urllib.urlopen(url, data)
+        #result = urllib.urlopen(url, data)
+        #data = data.encode('UTF-8')
+        data = urllib.parse.urlencode(data).encode('utf-8')
+        result = urllib.request.urlopen(url, data)
         string = result.read()
         result.close()
 
