@@ -1,88 +1,67 @@
-import sys
 import time
-import json
 import xmltodict
 from .base import Base
-from ..models import Rule, Text, News
+from ..models import Message as MessageModel
 
+"""
 class Template(Base):
-    """
-    Push Class
-    """
     def push_message(self, data):
-        """Push single message"""
         url = self.get_url('message/template/send', {'access_token':self.get_token()})
         message = json.dumps(data)
         result = self.get_data(url, message)
         return result
+"""
 
 
 class Message(Base):
     """
     Message Class, Receive and response message
     """
-    def __init__(self, request):
-        data = request.body
-        try:
-            data = dict(xmltodict.parse(data)['xml'])
-        except:
-            print("Request data error")
-            #sys.exit()
-        self.receive_data = data
+    def __init__(self):
+        pass
 
-    def response(self):
-        data = self.receive_data
+
+    def receive(self, xml):
+        receive_data = dict(xmltodict.parse(xml)['xml'])
+        return receive_data
+
+    def get_keyword(self, data):
         try:
             msg_type = data['MsgType']
-        except KeyError:
-            print("message has not msgtype")
-            return ""
 
-        rule = MessageRule('test')
-
-        normal_list = ['text','image','voice','video','shortvideo','location',\
-                'link','event']
-
-        if msg_type in normal_list:
-            try:
-                return rule.get_rule(data['Content'])
-            except KeyError:
-                return ""
-
-        elif msg_type == 'event':
-            try:
-                return rule.get_rule(data['Event'])
-            except KeyError:
-                print("msgtype is event, but no event")
-                return ""
-
-            event_list = ['SCAN','LOCATION','VIEW']
-
-            if event == 'subscribe':
-                "if is subscribe event"
-                return rule.get_rule('subscribe')
-                """
-                try:
-                    event_key = data['EventKey']
-                except KeyError:
-                    pass
-                """
-            elif event == 'CLICK':
-                "if is menu click event"
-                try:
-                    return rule.get_rule(data['EventKey'])
-                except KeyError:
-                    print("Click event no eventkey")
-                    return ""
-            elif event in event_list:
-                "if others, return null"
-                return ""
+            if msg_type == 'text':
+                keyword = data['Content']
+            elif msg_type == 'event':
+                event = data['Event']
+                if event == 'subscribe':
+                    keyword = 'subscribe'
+                elif event == 'unsubscribe':
+                    keyword = 'unsubscribe'
+                elif event == 'CLICK':
+                    keyword = data['EventKey']
+                else:
+                    keyword = 'default'
             else:
-                return ""
-        else:
-            return ""
+                keyword = 'default'
+        except KeyError:
+            keyword = 'default'
+
+        return keyword
+
+    def response(self, keyword, data):
+        try:
+            message = MessageModel.objects.get(keyword=keyword)
+            content = message.content % (
+                data['FromUserName'],
+                data['ToUserName'],
+                int(time.time()),
+            )
+            return content
+        except MessageModel.DoesNotExist:
+            return 'success'
 
 
+"""
 class MessageRule(Base):
     def __init__(self, openid):
         super(MessageRule, self).__init__()
@@ -155,3 +134,4 @@ class MessageRule(Base):
         message['xml']['CreateTime'] = int(time.time())
         message['xml']['MsgType'] = 'transfer_customer_service'
         return self.dict_to_xml(message)
+"""
