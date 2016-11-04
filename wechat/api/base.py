@@ -57,15 +57,14 @@ class Base(object):
         """Get data from url"""
         #result = urllib.urlopen(url, data)
         #data = data.encode('UTF-8')
-        data = urllib.parse.urlencode(data).encode('utf-8')
+        #data = urllib.parse.urlencode(data).encode('utf-8')
         result = urllib.request.urlopen(url, data)
         string = result.read()
         result.close()
 
+        result_data = string
         if data_type == 'json':
             result_data = json.loads(string)
-        elif data_type == 'string':
-            result_data = string
 
         return result_data
 

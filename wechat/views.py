@@ -1,3 +1,4 @@
+import urllib
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -10,9 +11,11 @@ def simulator(request):
     elif request.method == 'POST':
         url = request.POST['url']
         xml = request.POST['xml']
-        api = Base()
-        result = api.get_data(url, xml)
-        return HttpResponse(result)
+        data = urllib.parse.urlencode({'xml':xml}).encode('utf-8')
+        with urllib.request.urlopen(url, data) as f:
+            data = f.read()
+            return HttpResponse(data)
+
 
 @csrf_exempt
 def index(request):
