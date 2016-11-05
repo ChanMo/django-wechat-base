@@ -1,7 +1,7 @@
 import os
 from setuptools import setup
 
-with open(os.path.join(os.path.dirname(__file__), 'README.rst')) as readme:
+with open(os.path.join(os.path.dirname(__file__), 'README.rst'), encoding='utf-8') as readme:
     README = readme.read()
 
 # allow setup.py to be run from any path
@@ -9,14 +9,14 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = 'django-wechat-base',
-    version = '1.0.1',
+    version = '1.1.1',
     packages = ['wechat'],
     include_package_data = True,
     install_requires = ['xmltodict>=0.9.2'],
     license = 'BSD License',
     description = 'Remove Menu and Response Models',
     long_description = README,
-    url = 'https://github.com/ChanMo/django_wechat_base/',
+    url = 'https://github.com/ChanMo/django-wechat-base/',
     author = 'ChanMo',
     author_email = 'chen.orange@aliyun.com',
     classifiers = [

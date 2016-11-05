@@ -1,7 +1,7 @@
-基于django的微信接口模块
-========================
+基于django的微信基础功能模块
+============================
 
-一个基于django的微信接口模块
+一个基于django的微信基础功能模块
 
 快速开始:
 ---------
@@ -12,7 +12,8 @@
 
     pip install django-wechat-base
 
-把wechat模块添加到你的settings.py里面:
+
+修改settings.py文件:
 
 .. code-block::
 
@@ -22,23 +23,25 @@
         ...
     )
 
-在settings.py里面添加微信设置信息:
+
+
+在settings.py文件底部添加:
 
 .. code-block::
 
     # wechat config
-    WECHAT_APPID = ''
-    WECHAT_APPSECRET = ''
-    WECHAT_TOKEN = ''
-    WECHAT_DOMAIN = ''
-    WECHAT_MCH_ID = ''
-    WECHAT_KEY = ''
-    WECHAT_JS_DEBUG = ''
-    WECHAT_JS_APILIST = []
+    WECHAT = [
+        {
+            'appid': 'demo',
+            'appsecret': 'demo',
+            'token': 'demo',
+        },
+    ]
 
 
 版本更改:
 ---------
+- v1.1 只保留Base基础类
 - v1.0 分离基础接口和菜单，回复等功能
 - v0.6 添加对python3.x支持
 - v0.5 添加客服支持
