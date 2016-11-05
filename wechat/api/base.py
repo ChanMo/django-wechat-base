@@ -63,10 +63,9 @@ class Base(object):
         string = result.read()
         result.close()
 
+        result_data = string
         if data_type == 'json':
             result_data = json.loads(string)
-        elif data_type == 'string':
-            result_data = string
 
         return result_data
 
