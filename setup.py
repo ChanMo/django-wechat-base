@@ -1,4 +1,5 @@
 import os
+from io import open
 from setuptools import setup
 
 with open(os.path.join(os.path.dirname(__file__), 'README.rst'), encoding='utf-8') as readme:
@@ -9,12 +10,12 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = 'django-wechat-base',
-    version = '1.1.2',
+    version = '1.1.3',
     packages = ['wechat'],
     include_package_data = True,
     install_requires = ['future','xmltodict>=0.9.2'],
     license = 'BSD License',
-    description = '',
+    description = 'fixed setup.py open error',
     long_description = README,
     url = 'https://github.com/ChanMo/django-wechat-base/',
     author = 'ChanMo',
