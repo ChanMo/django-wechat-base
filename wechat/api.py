@@ -1,8 +1,14 @@
-import os
+from __future__ import unicode_literals
+from future.standard_library import install_aliases
+install_aliases()
+
 import sys
 import hashlib
-import urllib
 import json
+
+from urllib.parse import urlencode
+from urllib.request import urlopen
+
 from django.core.cache import cache
 from django.conf import settings
 
@@ -59,7 +65,7 @@ class Base(object):
         #data = data.encode('UTF-8')
         #data = urllib.parse.urlencode(data).encode('utf-8')
         data = data.encode('UTF-8')
-        result = urllib.request.urlopen(url, data)
+        result = urlopen(url, data)
         string = result.read()
         result.close()
 
@@ -102,7 +108,7 @@ class Base(object):
 
     def get_url(self, api, param, other=''):
         """make url"""
-        url_string = urllib.urlencode(param)
+        url_string = urlencode(param)
         if 'http' in api:
             url = api + '?' + url_string + other
         else:

@@ -9,12 +9,12 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name = 'django-wechat-base',
-    version = '1.1.1',
+    version = '1.1.2',
     packages = ['wechat'],
     include_package_data = True,
-    install_requires = ['xmltodict>=0.9.2'],
+    install_requires = ['future','xmltodict>=0.9.2'],
     license = 'BSD License',
-    description = 'Remove Menu and Response Models',
+    description = '',
     long_description = README,
     url = 'https://github.com/ChanMo/django-wechat-base/',
     author = 'ChanMo',
