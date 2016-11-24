@@ -5,6 +5,9 @@ install_aliases()
 import sys
 import hashlib
 import json
+import random
+import string
+import collections
 
 from urllib.parse import urlencode
 from urllib.request import urlopen
@@ -91,6 +94,7 @@ class Base(object):
             s = s + item + '=' + data[item] + '&'
         s = s[0:-1]
         s +=  '&key=%s' % self.key
+        s = s.encode('utf-8')
         s = hashlib.md5(s).hexdigest()
         ss = s.upper()
         return ss
