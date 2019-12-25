@@ -1,5 +1,2 @@
 include LICENSE
 include README.rst
-recursive-include wechat/locale *
-recursive-include wechat/templates *
-recursive-include docs *
