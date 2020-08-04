@@ -31,6 +31,7 @@ class Wechat:
         with urllib.request.urlopen(url) as f:
             res = f.read().decode('utf8')
             res = json.loads(res)
+            logger.debug(res)
             cache.set(
                 'wx_access_token',
                 res['access_token'],
